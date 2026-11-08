@@ -1,5 +1,5 @@
 
-const API_URL = "https://YOUR-BACKEND-URL.vercel.app";
+const API_URL = "https://hehe-art-c5xy.vercel.app";
 
 // Tải toàn bộ tranh lên Gallery
 async function loadGallery() {
