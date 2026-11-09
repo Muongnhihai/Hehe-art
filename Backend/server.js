@@ -56,15 +56,44 @@ function uploadToCloudinary(buffer) {
 }
 
 // Kết nối MongoDB
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("✅ Đã kết nối MongoDB!"))
-    .catch(error => console.error("❌ Lỗi kết nối MongoDB:", error));
+let dbConnectionPromise;
 
+async function connectDB() {
+    if (mongoose.connection.readyState === 1) return;
+
+    if (!process.env.MONGO_URI) {
+        throw new Error("Thiếu biến môi trường MONGO_URI");
+    }
+
+    if (!dbConnectionPromise) {
+        dbConnectionPromise = mongoose.connect(process.env.MONGO_URI, {
+            serverSelectionTimeoutMS: 10000
+        }).catch(error => {
+            dbConnectionPromise = null;
+            throw error;
+        });
+    }
+
+    await dbConnectionPromise;
+    console.log("✅ Đã kết nối MongoDB!");
+}
 app.get("/", (req, res) => {
     res.send("HEHE ART BACKEND - MULTI USER");
 });
 
 // Đăng ký
+app.use("/api", async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (error) {
+        console.error("❌ Lỗi kết nối MongoDB:", error);
+        res.status(503).json({
+            message: "Không thể kết nối Database",
+            error: error.message
+        });
+    }
+});
 app.post("/api/register", async (req, res) => {
     try {
         const { username, password } = req.body;
@@ -74,13 +103,6 @@ app.post("/api/register", async (req, res) => {
                 message: "Vui lòng nhập đầy đủ thông tin!"
             });
         }
-
-        if (password.length < 8) {
-            return res.status(400).json({
-                message: "Mật khẩu phải có ít nhất 8 ký tự!"
-            });
-        }
-
         const existingUser = await User.findOne({ username });
 
         if (existingUser) {
@@ -108,7 +130,18 @@ app.post("/api/register", async (req, res) => {
         res.status(500).json({ message: "Lỗi server!" });
     }
 });
-
+app.use("/api", async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (error) {
+        console.error("❌ Lỗi kết nối MongoDB:", error);
+        res.status(503).json({
+            message: "Không thể kết nối Database",
+            error: error.message
+        });
+    }
+});
 // Đăng nhập
 app.post("/api/login", async (req, res) => {
     try {
@@ -180,7 +213,18 @@ function authenticateToken(req, res, next) {
         });
     }
 }
-
+app.use("/api", async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (error) {
+        console.error("❌ Lỗi kết nối MongoDB:", error);
+        res.status(503).json({
+            message: "Không thể kết nối Database",
+            error: error.message
+        });
+    }
+});
 // Đăng tranh
 app.post("/api/posts", authenticateToken, upload.single("image"), async (req, res) => {
     let uploadedPublicId;
