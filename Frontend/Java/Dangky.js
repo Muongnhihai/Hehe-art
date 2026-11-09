@@ -1,29 +1,43 @@
-function Dangky() {
-    const username = document.getElementById("email").value;
-    const password = document.getElementById("pass").value;
+const API_URL = "https://hehe-art.vercel.app";
 
-    fetch("http://localhost:3000/api/register", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            username: username,
-            password: password
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById("message").textContent = data.message;
-    })
-    .catch(error => {
-        console.error(error);
-        document.getElementById("message").textContent = "Không kết nối được Backend!";
-    });
+async function Dangky() {
+    const username = document.getElementById("email").value.trim();
+    const password = document.getElementById("pass").value;
+    const message = document.getElementById("message");
+
+    if (!username || !password) {
+        message.textContent = "Vui lòng nhập đầy đủ tài khoản và mật khẩu!";
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_URL}/api/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        });
+
+        const data = await response.json();
+
+        message.textContent = data.message || (
+            response.ok ? "Đăng ký thành công!" : "Đăng ký thất bại!"
+        );
+
+    } catch (error) {
+        console.error("Lỗi đăng ký:", error);
+        message.textContent = "Không kết nối được Backend!";
+    }
 }
+
 function SignIn() {
-            window.location.href="./Web.html";
-        }
+    window.location.href = "./Web.html";
+}
+
 function showSupport() {
-            window.location.href="https://www.facebook.com/muong.nhi.hai";
-        }
+    window.location.href = "https://www.facebook.com/muong.nhi.hai";
+}

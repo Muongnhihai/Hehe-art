@@ -1,3 +1,6 @@
+
+const API_URL = "https://hehe-art.vercel.app";
+
 const artFile = document.getElementById("artFile");
 const imagePreview = document.getElementById("imagePreview");
 const previewText = document.querySelector(".preview-container p");
@@ -5,16 +8,17 @@ const caption = document.getElementById("caption");
 const uploadBtn = document.getElementById("uploadBtn");
 const message = document.getElementById("message");
 
-console.log("✅ Upload.js đã chạy");
+console.log("Upload.js đã chạy");
 
+// XEM TRƯỚC ẢNH
 artFile.addEventListener("change", () => {
     const file = artFile.files[0];
     if (!file) return;
 
-    console.log("📁 Đã chọn:", file.name);
+    console.log("Đã chọn:", file.name);
 
     if (!file.type.startsWith("image/")) {
-        message.textContent = "❌ Vui lòng chọn file ảnh!";
+        message.textContent = "Vui lòng chọn file ảnh!";
         artFile.value = "";
         return;
     }
@@ -22,22 +26,24 @@ artFile.addEventListener("change", () => {
     const imageURL = URL.createObjectURL(file);
     imagePreview.src = imageURL;
     imagePreview.style.display = "block";
-    previewText.style.display = "none";
+
+    if (previewText) previewText.style.display = "none";
     message.textContent = "";
 });
 
+// ĐĂNG TRANH
 uploadBtn.addEventListener("click", async () => {
     const file = artFile.files[0];
 
     if (!file) {
-        message.textContent = "⚠️ Bạn chưa chọn ảnh!";
+        message.textContent = "Bạn chưa chọn ảnh!";
         return;
     }
 
     const token = localStorage.getItem("token");
 
     if (!token) {
-        message.textContent = "⚠️ Bạn chưa đăng nhập!";
+        message.textContent = "Bạn chưa đăng nhập!";
         return;
     }
 
@@ -46,10 +52,10 @@ uploadBtn.addEventListener("click", async () => {
     formData.append("caption", caption.value);
 
     uploadBtn.disabled = true;
-    message.textContent = "⏳ Đang đăng tranh...";
+    message.textContent = "Đang đăng tranh...";
 
     try {
-        const response = await fetch("http://localhost:3000/api/posts", {
+        const response = await fetch(`${API_URL}/api/posts`, {
             method: "POST",
             headers: {
                 "Authorization": "Bearer " + token
@@ -63,20 +69,23 @@ uploadBtn.addEventListener("click", async () => {
             throw new Error(data.message || "Đăng tranh thất bại!");
         }
 
-        message.textContent = "✅ Đăng tranh thành công!";
+        message.textContent = "Đăng tranh thành công!";
+
         artFile.value = "";
         caption.value = "";
         imagePreview.src = "";
         imagePreview.style.display = "none";
-        previewText.style.display = "block";
+
+        if (previewText) previewText.style.display = "block";
 
         setTimeout(() => {
             window.location.href = "./Profile.html";
         }, 1000);
-    } catch (error) {
-        console.error(error);
-        message.textContent = "❌ " + error.message;
-    }
 
-    uploadBtn.disabled = false;
+    } catch (error) {
+        console.error("Lỗi đăng tranh:", error);
+        message.textContent = "Không thể đăng tranh: " + error.message;
+    } finally {
+        uploadBtn.disabled = false;
+    }
 });
