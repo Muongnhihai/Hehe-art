@@ -114,7 +114,6 @@ app.post("/api/register", async (req, res) => {
         }
 
         // Mã hóa mật khẩu trước khi lưu MongoDB
-        const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new User({
             username,
