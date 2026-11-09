@@ -220,3 +220,94 @@ body {
     opacity: 0.2;
     z-index: 0;
 }
+/* RESPONSIVE - TABLET */
+@media screen and (max-width: 768px) {
+    .chinh {
+        flex-direction: column;
+        justify-content: center;
+        min-height: 100vh;
+        overflow: auto;
+        padding: 20px 0;
+    }
+
+    .chinh::before {
+        display: none;
+    }
+
+    .noidung {
+        display: none;
+    }
+
+    .haha {
+        width: 90%;
+        max-width: 450px;
+        height: auto;
+        min-height: 450px;
+        box-sizing: border-box;
+        padding: 25px 20px;
+        margin: auto;
+        left: auto;
+        right: auto;
+        border-radius: 20px;
+        overflow: visible;
+    }
+
+    .dangnhap {
+        width: 100%;
+        margin: 10px auto;
+    }
+
+    .input-box {
+        width: 100%;
+        margin: 20px 0;
+        box-sizing: border-box;
+    }
+
+    .input-box input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .nut, .tao {
+        width: 100%;
+        box-sizing: border-box;
+        margin: 10px 0;
+    }
+
+    .tren {
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+/* RESPONSIVE - MOBILE */
+@media screen and (max-width: 480px) {
+    .haha {
+        width: 92%;
+        padding: 20px 16px;
+        min-height: 0;
+    }
+
+    .tren {
+        font-size: 19px;
+        margin: 15px 0;
+    }
+
+    .input-box input {
+        font-size: 16px;
+        padding: 13px;
+    }
+
+    .input-box label {
+        font-size: 15px;
+    }
+
+    .nut, .tao {
+        font-size: 16px;
+        padding: 14px;
+    }
+
+    .quen {
+        margin-bottom: 20px;
+    }
+}
