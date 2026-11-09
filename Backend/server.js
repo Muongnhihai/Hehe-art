@@ -105,6 +105,7 @@ app.post("/api/register", async (req, res) => {
                 message: "Vui lòng nhập đầy đủ thông tin!"
             });
         }
+
         const existingUser = await User.findOne({ username });
 
         if (existingUser) {
@@ -113,11 +114,9 @@ app.post("/api/register", async (req, res) => {
             });
         }
 
-        // Mã hóa mật khẩu trước khi lưu MongoDB
-
         const newUser = new User({
             username,
-            password: hashedPassword
+            password
         });
 
         await newUser.save();
