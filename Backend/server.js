@@ -165,7 +165,11 @@ app.post("/api/login", async (req, res) => {
         }
 
         // So sánh mật khẩu với mật khẩu đã mã hóa
-        const isMatch = await bcrypt.compare(password, user.password);
+        if (password !== user.password) {
+            return res.status(401).json({
+                message: "Tài khoản hoặc mật khẩu không đúng!"
+            });
+}
 
         if (!isMatch) {
             return res.status(401).json({
