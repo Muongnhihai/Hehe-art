@@ -126,9 +126,12 @@ app.post("/api/register", async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Lỗi đăng ký:", error);
-        res.status(500).json({ message: "Lỗi server!" });
-    }
+    console.error("Lỗi đăng ký:", error);
+    res.status(500).json({
+        message: "Lỗi server!",
+        error: error.message
+    });
+}
 });
 app.use("/api", async (req, res, next) => {
     try {
