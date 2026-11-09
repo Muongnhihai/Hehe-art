@@ -158,20 +158,7 @@ app.post("/api/login", async (req, res) => {
 
         const user = await User.findOne({ username });
 
-        if (!user) {
-            return res.status(401).json({
-                message: "Tài khoản hoặc mật khẩu không đúng!"
-            });
-        }
-
-        // So sánh mật khẩu với mật khẩu đã mã hóa
-        if (password !== user.password) {
-            return res.status(401).json({
-                message: "Tài khoản hoặc mật khẩu không đúng!"
-            });
-}
-
-        if (!isMatch) {
+        if (!user || password !== user.password) {
             return res.status(401).json({
                 message: "Tài khoản hoặc mật khẩu không đúng!"
             });
@@ -197,7 +184,6 @@ app.post("/api/login", async (req, res) => {
         res.status(500).json({ message: "Lỗi server!" });
     }
 });
-
 // Xác thực JWT
 function authenticateToken(req, res, next) {
     const authHeader = req.headers.authorization;
