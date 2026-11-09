@@ -13,9 +13,25 @@ const Post = require("./models/Post");
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
+const allowedOrigins = [
+    "https://hehe-art.vercel.app",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500"
+];
 
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+
+        return callback(new Error("Origin không được phép: " + origin));
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+app.use(express.json());
 const upload = multer({
     storage: multer.memoryStorage(),
     limits: { fileSize: 5 * 1024 * 1024 },
