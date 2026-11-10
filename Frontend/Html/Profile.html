@@ -32,10 +32,10 @@
             <div class="user-info">
                 <h1 id="username">hehe</h1>
                 <p class="nickname" id="nickname">@hehe</p>
-                <p class="bio">Vẽ những thứ mình thích ♡</p>
+                <p class="bio" id="bio">Vẽ những thứ mình thích ♡</p>
             </div>
             <div class="profile-actions">
-                <button class="edit-profile">Chỉnh sửa hồ sơ</button>
+                <button class="edit-profile" onclick="openEditProfile()">Chỉnh sửa hồ sơ</button>
                 <button class="upload-button" onclick="goToUpload()"><span>＋</span>Đăng tranh</button>
             </div>
             <div class="stats">
@@ -127,6 +127,25 @@
             
         </section>
     </main>
+    <div class="edit-modal" id="editModal">
+    <div class="edit-modal-content">
+        <h2>Chỉnh sửa hồ sơ</h2>
+
+        <label for="editAvatar">Ảnh đại diện</label>
+        <input type="file" id="editAvatar" accept="image/png,image/jpeg,image/webp">
+
+        <label for="editDisplayName">Tên hiển thị</label>
+        <input type="text" id="editDisplayName" maxlength="30" placeholder="Tên hiển thị">
+
+        <label for="editBio">Tiểu sử</label>
+        <textarea id="editBio" maxlength="200" placeholder="Viết đôi điều về bạn..."></textarea>
+
+        <div class="edit-modal-actions">
+            <button onclick="closeEditProfile()">Hủy</button>
+            <button onclick="saveProfile()">Lưu thay đổi</button>
+        </div>
+    </div>
+</div>
     <script src="../Java/Profile.js"></script>
 </body>
 </html>

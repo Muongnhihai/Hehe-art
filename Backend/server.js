@@ -206,6 +206,123 @@ function authenticateToken(req, res, next) {
         });
     }
 }
+
+app.get("/api/profile", authenticateToken, async (req, res) => {
+    try {
+        const user = await User.findById(req.userId).select("-password");
+
+        if (!user) {
+            return res.status(404).json({
+                message: "Không tìm thấy tài khoản!"
+            });
+        }
+
+        res.json(user);
+
+    } catch (error) {
+        console.error("Lỗi lấy hồ sơ:", error);
+        res.status(500).json({
+            message: "Không thể tải hồ sơ!"
+        });
+    }
+});
+function uploadAvatarToCloudinary(buffer) {
+    return new Promise((resolve, reject) => {
+        cloudinary.uploader.upload_stream(
+            {
+                folder: "hehe-art/avatars",
+                resource_type: "image"
+            },
+            (error, result) => {
+                if (error) return reject(error);
+                resolve(result);
+            }
+        ).end(buffer);
+    });
+}
+
+app.put("/api/profile", authenticateToken, upload.single("avatar"), async (req, res) => {
+    let newAvatarPublicId = null;
+
+    try {
+        const user = await User.findById(req.userId);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "Không tìm thấy tài khoản!"
+            });
+        }
+
+        const displayName = req.body.displayName;
+        const bio = req.body.bio;
+
+        if (displayName !== undefined) {
+            if (displayName.length > 50) {
+                return res.status(400).json({
+                    message: "Tên hiển thị tối đa 50 ký tự!"
+                });
+            }
+            user.displayName = displayName.trim();
+        }
+
+        if (bio !== undefined) {
+            if (bio.length > 200) {
+                return res.status(400).json({
+                    message: "Tiểu sử tối đa 200 ký tự!"
+                });
+            }
+            user.bio = bio.trim();
+        }
+
+        const oldAvatarPublicId = user.avatarPublicId;
+
+        if (req.file) {
+            const result = await uploadAvatarToCloudinary(req.file.buffer);
+
+            newAvatarPublicId = result.public_id;
+            user.avatarUrl = result.secure_url;
+            user.avatarPublicId = result.public_id;
+        }
+
+        await user.save();
+
+        // Chỉ xóa avatar cũ sau khi lưu avatar mới thành công
+        if (newAvatarPublicId && oldAvatarPublicId) {
+            try {
+                await cloudinary.uploader.destroy(oldAvatarPublicId);
+            } catch (cleanupError) {
+                console.error("Không xóa được avatar cũ:", cleanupError);
+            }
+        }
+
+        res.json({
+            message: "Cập nhật hồ sơ thành công!",
+            user: {
+                username: user.username,
+                displayName: user.displayName,
+                bio: user.bio,
+                avatarUrl: user.avatarUrl
+            }
+        });
+
+    } catch (error) {
+        console.error("Lỗi cập nhật hồ sơ:", error);
+
+        // Nếu cập nhật thất bại, dọn ảnh mới vừa upload
+        if (newAvatarPublicId) {
+            try {
+                await cloudinary.uploader.destroy(newAvatarPublicId);
+            } catch (cleanupError) {
+                console.error("Không dọn được avatar mới:", cleanupError);
+            }
+        }
+
+        res.status(500).json({
+            message: "Không thể cập nhật hồ sơ!"
+        });
+    }
+});
+
 app.use("/api", async (req, res, next) => {
     try {
         await connectDB();

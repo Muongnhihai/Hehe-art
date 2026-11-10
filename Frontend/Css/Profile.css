@@ -795,3 +795,78 @@ body {
 
     font-size: 16px;
 }
+/* Avatar */
+.avatar, .mini-avatar {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatar img, .mini-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Hộp chỉnh sửa */
+.edit-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.edit-modal.active {
+    display: flex;
+}
+
+.edit-modal-content {
+    width: 100%;
+    max-width: 420px;
+    background: white;
+    padding: 25px;
+    border-radius: 16px;
+}
+
+.edit-modal-content h2 {
+    margin-bottom: 20px;
+}
+
+.edit-modal-content label {
+    display: block;
+    margin: 12px 0 6px;
+    font-weight: 600;
+}
+
+.edit-modal-content input,
+.edit-modal-content textarea {
+    width: 100%;
+    padding: 11px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font: inherit;
+}
+
+.edit-modal-content textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.edit-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.edit-modal-actions button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
