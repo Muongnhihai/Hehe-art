@@ -2,6 +2,7 @@
 const API_URL = "https://hehe-art.vercel.app";
 
 // Tải toàn bộ tranh lên Gallery
+
 async function loadGallery() {
     const gallery = document.getElementById("artGallery");
 
@@ -40,7 +41,12 @@ async function loadGallery() {
 
             author.textContent = "@" + (username || post.username || "unknown");
 
-            card.append(img, author);
+            // Caption
+            const caption = document.createElement("p");
+            caption.className = "art-caption";
+            caption.textContent = post.caption || "";
+
+            card.append(img, author, caption);
             gallery.append(card);
         });
 

@@ -296,6 +296,13 @@ button, input {
     overflow-wrap: anywhere;
     margin: 16px 0 0;
 }
+.art-caption {
+    font-size: 14px;
+    color: #555;
+    margin: 5px 0 10px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
 
 .lightbox-close {
     position: absolute;
