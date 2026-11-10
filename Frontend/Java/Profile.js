@@ -1,5 +1,5 @@
 
-const API_URL = "THAY_BANG_URL_BACKEND_CUA_BAN";
+const API_URL = "https://hehe-art.vercel.app";
 
 const token = localStorage.getItem("token");
 
