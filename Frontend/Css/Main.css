@@ -529,3 +529,7 @@ button, input {
         height: 32px;
     }
 }
+.auth-actions[hidden],
+.logo[hidden] {
+    display: none !important;
+}

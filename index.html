@@ -1,64 +1,50 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MyartGallery</title>
-    <link rel ="stylesheet" href="./Frontend/Css/Main.css">
-    
+    <title>Hehe Gallery</title>
+    <link rel="stylesheet" href="./Frontend/Css/Main.css">
 </head>
 <body>
     <div class="container">
         <div class="bar">
-    <div class="mucluc">
-        <input type="checkbox" id="menu-toggle">
-        <label for="menu-toggle" class="menu-btn">✦</label>
-        <div class="menu-content">
-            <button class="Chon" onclick="window.location.href='index.html'">☾ Trang chủ</button>
-            <button class="Chon">✎ Artist</button>
-            <button class="Chon">♡ Tri ân</button>
-        </div>
-    </div>
-
-    <button class="hehe" onclick="window.location.href='index.html'">Hehe Gallery</button>
-
-    <input type="text" placeholder="Tìm kiếm tác phẩm..." class="search-bar">
-
-    <p class="ii"></p>
-
-    <div class="auth-actions" id="authActions">
-        <button class="nut" id="dangnhapBtn" onclick="window.location.href='./Frontend/Html/Web.html'">Đăng nhập</button>
-        <button class="nut" id="dangkyBtn" onclick="window.location.href='./Frontend/Html/Dangky.html'">Đăng ký</button>
-    </div>
-
-    <button class="logo" id="profileBtn" onclick="window.location.href='./Frontend/Html/Profile.html'" aria-label="Trang cá nhân" hidden>
-        <img id="profileAvatar" alt="Avatar người dùng" hidden>
-        <span id="avatarFallback">?</span>
-    </button>
-</div>
+            <div class="mucluc">
+                <input type="checkbox" id="menu-toggle">
+                <label for="menu-toggle" class="menu-btn">✦</label>
+                <div class="menu-content">
+                    <button class="Chon" onclick="window.location.href='index.html'">☾ Trang chủ</button>
+                    <button class="Chon">✎ Artist</button>
+                    <button class="Chon">♡ Tri ân</button>
+                </div>
             </div>
+
             <button class="hehe" onclick="window.location.href='index.html'">Hehe Gallery</button>
-            <input type="text" placeholder="Tìm kiếm..." class="search-bar">
+            <input type="text" placeholder="Tìm kiếm tác phẩm..." class="search-bar">
             <p class="ii"></p>
-            <button class="nut" id="dangnhapBtn" onclick="window.location.href='./Frontend/Html/Web.html'">Đăng nhập</button>
-            <button class="nut" id="dangkyBtn" onclick="window.location.href='./Frontend/Html/Dangky.html'">Đăng ký</button>
-            <button class="logo" id="profileBtn" onclick="window.location.href='./Frontend/Html/Profile.html'">Profile</button>
+
+            <div class="auth-actions" id="authActions">
+                <button class="nut" id="dangnhapBtn" onclick="window.location.href='./Frontend/Html/Web.html'">Đăng nhập</button>
+                <button class="nut" id="dangkyBtn" onclick="window.location.href='./Frontend/Html/Dangky.html'">Đăng ký</button>
+            </div>
+
+            <button class="logo" id="profileBtn" onclick="window.location.href='./Frontend/Html/Profile.html'" aria-label="Trang cá nhân" hidden>
+                <img id="profileAvatar" alt="Avatar người dùng" hidden>
+                <span id="avatarFallback">?</span>
+            </button>
         </div>
+
         <div class="art-gallery" id="artGallery"></div>
-       
+
         <div id="artLightbox" class="art-lightbox">
             <button id="closeLightbox" class="lightbox-close" aria-label="Đóng">&times;</button>
             <img id="lightboxImage" src="" alt="Tranh phóng to">
             <p id="lightboxAuthor"></p>
         </div>
-        </div>
-        <div>
-            
-        </div>
     </div>
-     </div>
-            <script src="./Frontend/Java/Main.js"></script>
-            <script src="./Frontend/Java/Navbar.js"></script>
-    </div>
+
+    <script src="./Frontend/Java/Main.js"></script>
+    <script src="./Frontend/Java/Navbar.js"></script>
 </body>
 </html>
