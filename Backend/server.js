@@ -18,7 +18,8 @@ const allowedOrigins = [
     "https://heheart.vercel.app",
     "https://myheheart.vercel.app",
     "http://localhost:5500",
-    "http://127.0.0.1:5500"
+    "http://127.0.0.1:5500",
+    "https://muongnhihai-hehe-rl2tmuygg-mg29.vercel.app"
 ];
 
 app.use(cors({
@@ -357,12 +358,11 @@ app.post("/api/posts", authenticateToken, upload.single("image"), async (req, re
         const result = await uploadToCloudinary(req.file.buffer);
         uploadedPublicId = result.public_id;
 
-        const newPost = new Post({
+      const newPost = new Post({
             author: user._id,
             imageUrl: result.secure_url,
             caption: req.body.caption || ""
         });
-
         await newPost.save();
         await newPost.populate("author", "username");
 
@@ -387,11 +387,7 @@ app.post("/api/posts", authenticateToken, upload.single("image"), async (req, re
         });
     }
 });
-const newPost = new Post({
-    author: user._id,
-    imageUrl: result.secure_url,
-    caption: req.body.caption || ""
-});
+
 // Lấy tất cả bài đăng
 app.get("/api/posts", async (req, res) => {
     try {
