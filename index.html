@@ -10,14 +10,32 @@
 <body>
     <div class="container">
         <div class="bar">
-            <div class="mucluc">
-            <input type="checkbox" id="menu-toggle">
-            <label for="menu-toggle" class="menu-btn">✦</label>
-            <div class="menu-content">
-                <button class="Chon" onclick="window.location.href='index.html'">☾ Trang chủ</button>
-                <button class="Chon">✎ Artist</button> 
-                <button class="Chon"> ♡Tri ân</button>
-            </div>
+    <div class="mucluc">
+        <input type="checkbox" id="menu-toggle">
+        <label for="menu-toggle" class="menu-btn">✦</label>
+        <div class="menu-content">
+            <button class="Chon" onclick="window.location.href='index.html'">☾ Trang chủ</button>
+            <button class="Chon">✎ Artist</button>
+            <button class="Chon">♡ Tri ân</button>
+        </div>
+    </div>
+
+    <button class="hehe" onclick="window.location.href='index.html'">Hehe Gallery</button>
+
+    <input type="text" placeholder="Tìm kiếm tác phẩm..." class="search-bar">
+
+    <p class="ii"></p>
+
+    <div class="auth-actions" id="authActions">
+        <button class="nut" id="dangnhapBtn" onclick="window.location.href='./Frontend/Html/Web.html'">Đăng nhập</button>
+        <button class="nut" id="dangkyBtn" onclick="window.location.href='./Frontend/Html/Dangky.html'">Đăng ký</button>
+    </div>
+
+    <button class="logo" id="profileBtn" onclick="window.location.href='./Frontend/Html/Profile.html'" aria-label="Trang cá nhân" hidden>
+        <img id="profileAvatar" alt="Avatar người dùng" hidden>
+        <span id="avatarFallback">?</span>
+    </button>
+</div>
             </div>
             <button class="hehe" onclick="window.location.href='index.html'">Hehe Gallery</button>
             <input type="text" placeholder="Tìm kiếm..." class="search-bar">
