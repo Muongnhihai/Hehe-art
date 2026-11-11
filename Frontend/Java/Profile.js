@@ -142,4 +142,117 @@ async function saveProfile() {
 }
 
 // Tự động tải hồ sơ khi mở trang
-document.addEventListener("DOMContentLoaded", loadProfile);
+document.addEventListener("DOMContentLoaded", () => {
+    loadProfile();
+    loadMyPosts();
+});
+// Định dạng ngày đăng
+function formatDate(date) {
+    return new Date(date).toLocaleDateString("vi-VN", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+    });
+}
+
+// Tải bài đăng cá nhân
+async function loadMyPosts() {
+    const postGrid = document.getElementById("postGrid");
+    const emptyPost = document.getElementById("emptyPost");
+    const postCount = document.getElementById("postCount");
+
+    try {
+        const res = await fetch(`${API_URL}/api/my-posts`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const posts = await res.json();
+
+        if (!res.ok) {
+            throw new Error(posts.message || "Không thể tải bài đăng!");
+        }
+
+        postGrid.replaceChildren();
+
+        postCount.textContent = posts.length;
+
+        if (posts.length === 0) {
+            emptyPost.style.display = "block";
+            return;
+        }
+
+        emptyPost.style.display = "none";
+
+        posts.forEach(post => {
+            const card = document.createElement("article");
+            card.className = "post-card";
+
+            const imageContainer = document.createElement("div");
+            imageContainer.className = "image-container";
+
+            const img = document.createElement("img");
+            img.src = post.imageUrl;
+            img.alt = post.caption || "Artwork";
+            img.loading = "lazy";
+
+            const postInfo = document.createElement("div");
+            postInfo.className = "post-info";
+
+            const title = document.createElement("h3");
+            title.textContent = post.caption || "Tác phẩm không có chú thích";
+
+            const date = document.createElement("p");
+            date.textContent = "Đăng ngày " + formatDate(post.createdAt);
+
+            const deleteButton = document.createElement("button");
+            deleteButton.className = "delete-post";
+            deleteButton.textContent = "Xóa bài";
+            deleteButton.onclick = () => deletePost(post._id);
+
+            imageContainer.appendChild(img);
+            postInfo.append(title, date, deleteButton);
+            card.append(imageContainer, postInfo);
+
+            postGrid.appendChild(card);
+        });
+
+    } catch (error) {
+        console.error("Lỗi tải bài đăng:", error);
+        alert(error.message);
+    }
+}
+
+// Xóa bài đăng
+async function deletePost(postId) {
+    const confirmed = confirm(
+        "Bạn có chắc chắn muốn xóa bài đăng này không?"
+    );
+
+    if (!confirmed) return;
+
+    try {
+        const res = await fetch(`${API_URL}/api/posts/${postId}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.message || "Xóa bài thất bại!");
+        }
+
+        alert("Đã xóa bài đăng!");
+
+        // Tải lại danh sách và cập nhật số bài đăng
+        loadMyPosts();
+
+    } catch (error) {
+        console.error("Lỗi xóa bài:", error);
+        alert(error.message);
+    }
+}

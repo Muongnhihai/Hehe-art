@@ -870,3 +870,20 @@ body {
     border-radius: 8px;
     cursor: pointer;
 }
+.delete-post {
+    margin-top: 10px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    background: #fff0f0;
+    color: #d64545;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.delete-post:hover {
+    background: #d64545;
+    color: white;
+}

@@ -387,7 +387,11 @@ app.post("/api/posts", authenticateToken, upload.single("image"), async (req, re
         });
     }
 });
-
+const newPost = new Post({
+    author: user._id,
+    imageUrl: result.secure_url,
+    caption: req.body.caption || ""
+});
 // Lấy tất cả bài đăng
 app.get("/api/posts", async (req, res) => {
     try {
@@ -420,6 +424,43 @@ app.get("/api/my-posts", authenticateToken, async (req, res) => {
         console.error("Lỗi lấy bài đăng cá nhân:", error);
         res.status(500).json({
             message: "Lỗi tải bài đăng cá nhân!"
+        });
+    }
+});
+// Xóa bài đăng của chính mình
+app.delete("/api/posts/:id", authenticateToken, async (req, res) => {
+    try {
+        const post = await Post.findOne({
+            _id: req.params.id,
+            author: req.userId
+        });
+
+        if (!post) {
+            return res.status(404).json({
+                message: "Không tìm thấy bài viết hoặc bạn không có quyền xóa!"
+            });
+        }
+
+        await Post.findByIdAndDelete(post._id);
+
+        // Dọn ảnh trên Cloudinary nếu bài viết có lưu public_id
+        if (post.imagePublicId) {
+            try {
+                await cloudinary.uploader.destroy(post.imagePublicId);
+            } catch (error) {
+                console.error("Không xóa được ảnh Cloudinary:", error);
+            }
+        }
+
+        res.json({
+            message: "Xóa bài đăng thành công!"
+        });
+
+    } catch (error) {
+        console.error("Lỗi xóa bài đăng:", error);
+
+        res.status(500).json({
+            message: "Không thể xóa bài đăng!"
         });
     }
 });

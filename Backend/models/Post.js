@@ -1,4 +1,3 @@
-
 const mongoose = require("mongoose");
 
 const postSchema = new mongoose.Schema({
@@ -10,6 +9,10 @@ const postSchema = new mongoose.Schema({
     imageUrl: {
         type: String,
         required: true
+    },
+    imagePublicId: {
+        type: String,
+        default: ""
     },
     caption: {
         type: String,
