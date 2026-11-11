@@ -887,3 +887,18 @@ body {
     background: #d64545;
     color: white;
 }
+.logout-btn {
+    padding: 10px 20px;
+    border: 1px solid #d9534f;
+    border-radius: 10px;
+    background: white;
+    color: #d9534f;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.logout-btn:hover {
+    background: #d9534f;
+    color: white;
+}

@@ -256,3 +256,14 @@ async function deletePost(postId) {
         alert(error.message);
     }
 }
+
+document.getElementById("logoutBtn")?.addEventListener("click", () => {
+    const confirmLogout = confirm("Bạn có chắc muốn đăng xuất không?");
+
+    if (!confirmLogout) return;
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+
+    window.location.href = "../../index.html";
+});
