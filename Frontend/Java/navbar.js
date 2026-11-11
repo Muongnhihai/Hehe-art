@@ -1,4 +1,4 @@
-
+console.log("Navbar.js đã chạy!");
 (() => {
     const API_URL = "https://hehe-art.vercel.app";
 
