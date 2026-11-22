@@ -15,8 +15,14 @@ async function loadGallery() {
         const res = await fetch(`${API_URL}/api/posts`);
         if (!res.ok) throw new Error("HTTP " + res.status);
 
-        const posts = await res.json();
-        console.log("Dữ liệu bài đăng:", posts);
+        const data = await res.json();
+            console.log("Dữ liệu bài đăng:", data);
+
+            const posts = Array.isArray(data) ? data : data.posts;
+
+            if (!Array.isArray(posts)) {
+                throw new Error("API không trả về danh sách bài đăng hợp lệ");
+}
 
         gallery.replaceChildren();
 
