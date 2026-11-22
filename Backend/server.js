@@ -389,13 +389,88 @@ app.post("/api/posts", authenticateToken, upload.single("image"), async (req, re
 });
 
 // Lấy tất cả bài đăng
+
+// Lấy danh sách bài đăng theo Cursor Pagination
 app.get("/api/posts", async (req, res) => {
     try {
-        const posts = await Post.find()
-            .populate("author", "username")
-            .sort({ createdAt: -1 });
+        // 1. Giới hạn số bài viết mỗi lần tải
+        const limit = Math.min(
+            Math.max(parseInt(req.query.limit) || 12, 1),
+            30
+        );
 
-        res.json(posts);
+        // 2. Tạo điều kiện truy vấn
+        let filter = {};
+
+        // 3. Nếu có cursor, lấy những bài cũ hơn cursor
+        if (req.query.cursor) {
+            let cursorData;
+
+            try {
+                cursorData = JSON.parse(
+                    Buffer.from(req.query.cursor, "base64url").toString("utf8")
+                );
+            } catch {
+                return res.status(400).json({
+                    message: "Cursor không hợp lệ!"
+                });
+            }
+
+            const cursorDate = new Date(cursorData.createdAt);
+            const cursorId = cursorData.id;
+
+            if (
+                isNaN(cursorDate.getTime()) ||
+                !mongoose.Types.ObjectId.isValid(cursorId) ||
+                new mongoose.Types.ObjectId(cursorId).toString() !== cursorId
+            ) {
+                return res.status(400).json({
+                    message: "Cursor không hợp lệ!"
+                });
+            }
+
+            filter = {
+                $or: [
+                    { createdAt: { $lt: cursorDate } },
+                    {
+                        createdAt: cursorDate,
+                        _id: { $lt: new mongoose.Types.ObjectId(cursorId) }
+                    }
+                ]
+            };
+        }
+
+        // 4. Lấy limit + 1 để xác định còn bài viết hay không
+        const results = await Post.find(filter)
+            .populate("author", "username")
+            .sort({ createdAt: -1, _id: -1 })
+            .limit(limit + 1)
+            .lean();
+
+        // 5. Xác định còn dữ liệu không
+        const hasMore = results.length > limit;
+        const posts = results.slice(0, limit);
+
+        // 6. Tạo cursor tiếp theo
+        let nextCursor = null;
+
+        if (hasMore && posts.length > 0) {
+            const lastPost = posts[posts.length - 1];
+
+            nextCursor = Buffer.from(
+                JSON.stringify({
+                    createdAt: lastPost.createdAt,
+                    id: lastPost._id.toString()
+                })
+            ).toString("base64url");
+        }
+
+        // 7. Trả kết quả
+        res.json({
+            posts,
+            nextCursor,
+            hasMore
+        });
 
     } catch (error) {
         console.error("Lỗi API /api/posts:", error);
@@ -406,6 +481,7 @@ app.get("/api/posts", async (req, res) => {
         });
     }
 });
+
 
 // Lấy bài đăng của tài khoản hiện tại
 app.get("/api/my-posts", authenticateToken, async (req, res) => {

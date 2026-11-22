@@ -533,3 +533,9 @@ button, input {
 .logo[hidden] {
     display: none !important;
 }
+
+.gallery-loader {
+    grid-column: 1 / -1;
+    color: #777;
+    font-size: 14px;
+}
